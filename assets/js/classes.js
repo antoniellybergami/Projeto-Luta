@@ -61,11 +61,12 @@ class Monstrão extends Personagem {
 
 //cuida do cenário
 class Cenario {
-    constructor(figther1, figther2, figther1El, figther2El){
+    constructor(figther1, figther2, figther1El, figther2El, logObject){
         this.figther1 = figther1;
         this.figther2 = figther2;
         this.figther1El = figther1El;
         this.figther2El = figther2El;
+        this.log = logObject;
     }
     
     //exibir na tela e startar no jogo
@@ -80,14 +81,14 @@ class Cenario {
     //atualiza a tela com as informações dos dois lutadores
     update(){
         //Figther 1
-        this.figther1El.querySelector('.name').innerHTML = `${this.figther1.name} - ${this.figther1.life} HP` ;     //procura a classe name para por dentro do elemento
+        this.figther1El.querySelector('.name').innerHTML = `${this.figther1.name} - ${this.figther1.life.toFixed(1)} HP` ;     //procura a classe name para por dentro do elemento
         //barra de vida:
         let f1Pct= (this.figther1.life/this.figther1.maxLife) * 100; //pega a porcentagem de vida com base na vida máxima
         //preenche a largura na barrinha do html:
         this.figther1El.querySelector('.bar').style.width = `${f1Pct}%`;
         
         //Figther 2
-        this.figther2El.querySelector('.name').innerHTML = `${this.figther2.name} - ${this.figther2.life} HP`;
+        this.figther2El.querySelector('.name').innerHTML = `${this.figther2.name} - ${this.figther2.life.toFixed(1)} HP`;
         //barra de vida:
         let f2Pct= (this.figther2.life/this.figther2.maxLife) * 100; 
         this.figther2El.querySelector('.bar').style.width = `${f2Pct}%`;
@@ -97,7 +98,7 @@ class Cenario {
     doAttack(attacking, attacked){
         //quem tá atacando, tá vivo?
         if(attacking.life <= 0 || attacked.life < 0){
-            console.log("já tá morto");
+            this.log.addMessage("já tá morto");
             return;
         }
 
@@ -111,11 +112,32 @@ class Cenario {
 
         if(actualAttack > actualDefense) { //vai ter dano
             attacked.life -= (actualAttack - actualDefense);
-            console.log(`${attacking.name} causou ${actualAttack} da dano em ${attacked.name}`);
+            this.log.addMessage(`${attacking.name} causou ${actualAttack} da dano em ${attacked.name}`);
         } else { //conseguiu se defender
-            console.log(`${attacked.name} conseguiu se defender`);
+            this.log.addMessage(`${attacked.name} conseguiu se defender`);
         }
 
         this.update();
+    }
+}
+
+class Log {
+    list = []
+
+    constructor(listEl){
+        this.listEl = listEl;
+    }
+
+    addMessage(msg) {
+        this.list.push(msg);
+        this.render();
+    }
+
+    render() {
+        this.listEl.innerHTML = '';
+
+        for(let i in this.list){
+            this.listEl.innerHTML += `<li>${this.list[i]}</li>`
+        }
     }
 }
