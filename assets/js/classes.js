@@ -94,7 +94,28 @@ class Cenario {
     }
 
     //faça um ataque
-    doAttack(attracking, attacked){
-        console.log(`${attracking.name} está atacando ${attacked.name}`);
+    doAttack(attacking, attacked){
+        //quem tá atacando, tá vivo?
+        if(attacking.life <= 0 || attacked.life < 0){
+            console.log("já tá morto");
+            return;
+        }
+
+        //ataque
+        let attackFactor = (Math.random() * 2).toFixed(2);
+        let actualAttack = attacking.attack * attackFactor;
+
+        //defesa
+        let defenseFactor = (Math.random() * 2).toFixed(2);
+        let actualDefense = attacked.defense * defenseFactor;
+
+        if(actualAttack > actualDefense) { //vai ter dano
+            attacked.life -= (actualAttack - actualDefense);
+            console.log(`${attacking.name} causou ${actualAttack} da dano em ${attacked.name}`);
+        } else { //conseguiu se defender
+            console.log(`${attacked.name} conseguiu se defender`);
+        }
+
+        this.update();
     }
 }
