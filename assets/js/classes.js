@@ -9,11 +9,12 @@ class Personagem {
         this.name = name;
     }
 
-    //a vida n pode ficar menor que zero pq zero é morto
+    
     get life(){
         return this._life;
     }
 
+    //a vida n pode ficar menor que zero pq zero é morto
     set life(newLife){
         this._life = newLife < 0 ? 0 : newLife; 
     }
@@ -140,4 +141,4 @@ class Log {
             this.listEl.innerHTML += `<li>${this.list[i]}</li>`
         }
     }
-}
+}   n

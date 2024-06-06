@@ -11,4 +11,5 @@ const stage = new Cenario(
     log,
 );
 
+
 stage.start();
